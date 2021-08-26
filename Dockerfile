@@ -14,13 +14,12 @@ COPY . ./
 
 
 FROM alpine:latest
-RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
-
+RUN apk update && apk add ca-certificates iptables iproute2 && rm -rf /var/cache/apk/*
 # Copy binary to production image
-COPY --from=builder /app/start.sh /app/start.sh
-COPY --from=tailscale /app/tailscaled /app/tailscaled
-COPY --from=tailscale /app/tailscale /app/tailscale
+COPY --from=builder /app/start.sh /start.sh
+COPY --from=tailscale /app/tailscaled /usr/bin/tailscaled
+COPY --from=tailscale /app/tailscale /usr/bin/tailscale
+RUN chmod -R 777 /start.sh
 RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
-
 # Run on container startup.
-CMD ["/app/start.sh"]
+CMD ["/start.sh"]
