@@ -2,6 +2,7 @@ FROM golang:1.16.7-alpine3.14 as builder
 WORKDIR /app
 COPY . ./
 # This is where one could build the application code as well.
+# Using https://tailscale.com/kb/1132/flydotio as a reference
 
 
 FROM alpine:latest as tailscale
